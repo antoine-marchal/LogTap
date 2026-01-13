@@ -1,0 +1,33 @@
+{
+  "server": {
+    "port": 3000,
+    "host": "0.0.0.0"
+  },
+  "mongodb": {
+    "uri": "mongodb://localhost:27017",
+    "database": "logtap",
+    "collection": "logs",
+    "options": {
+      "maxPoolSize": 10,
+      "minPoolSize": 2,
+      "serverSelectionTimeoutMS": 5000,
+      "connectTimeoutMS": 10000
+    }
+  },
+  "auth": {
+    "tokens": []
+  },
+  "logging": {
+    "level": "info",
+    "enableConsole": true
+  },
+  "rateLimit": {
+    "enabled": false,
+    "windowMs": 60000,
+    "maxRequests": 100
+  },
+  "cors": {
+    "enabled": true,
+    "origin": "*"
+  }
+}

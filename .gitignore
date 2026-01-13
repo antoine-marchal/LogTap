@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+bun.lockb
+
+# Build outputs
+logtap
+logtap-linux
+logtap-mac
+logtap.exe
+dist/
+data/
+
+# Configuration (contains secrets)
+config/logtap.config.json
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# Logs
+logs/*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test coverage
+coverage/
+
+# PID files
+*.pid

@@ -1,0 +1,50 @@
+{
+  "name": "logtap",
+  "version": "1.0.1",
+  "description": "A lightweight, secure HTTP logging server with MongoDB persistence",
+  "main": "src/index.js",
+  "type": "module",
+  "bin": {
+    "logtap": "./src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js start",
+    "dev": "node src/index.js start --verbose",
+    "embed-assets": "node scripts/embed-assets.js",
+    "prebuild": "npm run embed-assets",
+    "build": "bun build src/index.js --compile --outfile dist/logtap",
+    "prebuild:linux": "npm run embed-assets",
+    "build:linux": "bun build src/index.js --compile --target=bun-linux-x64 --outfile dist/logtap-linux",
+    "prebuild:mac": "npm run embed-assets",
+    "build:mac": "bun build src/index.js --compile --target=bun-darwin-x64 --outfile dist/logtap-mac",
+    "prebuild:windows": "npm run embed-assets",
+    "build:windows": "bun build src/index.js --compile --target=bun-windows-x64 --outfile dist/logtap.exe",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:unit": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests/unit",
+    "test:integration": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests/integration"
+  },
+  "keywords": [
+    "logging",
+    "http",
+    "mongodb",
+    "cli",
+    "server"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^12.1.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.0",
+    "express-rate-limit": "^7.4.0",
+    "helmet": "^7.1.0",
+    "mongodb": "^6.9.0",
+    "nedb-promises": "^6.2.3"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
