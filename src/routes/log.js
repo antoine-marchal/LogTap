@@ -7,7 +7,7 @@ import { validateToken } from '../services/token.js';
 import { createErrorResponse, ErrorCodes } from '../utils/errors.js';
 import { formatUptime } from '../utils/helpers.js';
 import { getLogViewerHTML } from './viewer.js';
-import { DAISYUI_CSS, TAILWIND_JS } from '../assets/embedded.js';
+import { DAISYUI_CSS, TAILWIND_JS, FAVICON_BUFFER } from '../assets/embedded.js';
 
 const startTime = Date.now();
 
@@ -109,8 +109,8 @@ export function createLogRoutes(config) {
         let result;
 
         if (search && field && field !== '_all') {
-          // Search in specific field
-          filter[field] = { $regex: search, $options: 'i' };
+          // Search in specific field - NeDB requires RegExp object
+          filter[field] = { $regex: new RegExp(search, 'i') };
           result = await queryLogs(config, {
             filter,
             limit: parseInt(limit, 10),
@@ -223,6 +223,17 @@ export function createLogRoutes(config) {
       }
     }
   );
+  // Serve favicon
+  router.get('/favicon.ico', (req, res) => {
+    if (FAVICON_BUFFER) {
+      res.set('Content-Type', 'image/x-icon');
+      res.set('Cache-Control', 'public, max-age=86400');
+      res.send(FAVICON_BUFFER);
+    } else {
+      res.status(404).send('Not found');
+    }
+  });
+
   router.get('/', async (req, res) => {
     return res.status(401).send(`
         <!DOCTYPE html>

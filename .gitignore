@@ -36,3 +36,4 @@ coverage/
 
 # PID files
 *.pid
+*.xlsx
