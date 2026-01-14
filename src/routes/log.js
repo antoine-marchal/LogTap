@@ -108,9 +108,12 @@ export function createLogRoutes(config) {
 
         let result;
 
+        // Escape special regex characters for safe searching
+        const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
         if (search && field && field !== '_all') {
           // Search in specific field - NeDB requires RegExp object
-          filter[field] = { $regex: new RegExp(search, 'i') };
+          filter[field] = { $regex: new RegExp(escapeRegex(search), 'i') };
           result = await queryLogs(config, {
             filter,
             limit: parseInt(limit, 10),
