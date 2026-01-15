@@ -4,21 +4,22 @@
   "description": "A lightweight, secure HTTP logging server with MongoDB persistence",
   "main": "src/index.js",
   "type": "module",
+
   "bin": {
     "logtap": "./src/index.js"
   },
   "scripts": {
     "start": "node src/index.js start",
     "dev": "node src/index.js start --verbose",
+
     "embed-assets": "node scripts/embed-assets.js",
     "prebuild": "npm run embed-assets",
-    "build": "bun build src/index.js --compile --icon ico.ico --outfile dist/logtap",
-    "prebuild:linux": "npm run embed-assets",
-    "build:linux": "bun build src/index.js --compile --icon ico.ico --target=bun-linux-x64 --outfile dist/logtap-linux",
-    "prebuild:mac": "npm run embed-assets",
-    "build:mac": "bun build src/index.js --compile --icon ico.ico --target=bun-darwin-x64 --outfile dist/logtap-mac",
-    "prebuild:windows": "npm run embed-assets",
-    "build:windows": "bun build src/index.js --compile --target=bun-windows-x64 --icon ico.ico --outfile dist/logtap.exe",
+
+    "build": "node scripts/build.mjs",
+    "build:windows": "node scripts/build.mjs windows",
+    "build:linux": "node scripts/build.mjs linux",
+    "build:mac": "node scripts/build.mjs mac",
+
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test:unit": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests/unit",
     "test:integration": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests/integration"
@@ -30,7 +31,7 @@
     "cli",
     "server"
   ],
-  "author": "",
+  "author": "https://github.com/antoine-marchal/LogTap",
   "license": "MIT",
   "dependencies": {
     "commander": "^12.1.0",
