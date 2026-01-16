@@ -1,5 +1,6 @@
 import * as mongodbService from './mongodb.js';
 import * as nedbService from './nedb.js';
+import * as mssqlService from './mssql.js';
 
 let currentService = null;
 let currentType = null;
@@ -15,6 +16,8 @@ function getService(config) {
     return mongodbService;
   } else if (dbType === 'nedb') {
     return nedbService;
+  } else if (dbType === 'mssql') {
+    return mssqlService;
   }
 
   throw new Error(`Unknown database type: ${dbType}`);

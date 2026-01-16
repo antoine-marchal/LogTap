@@ -24,6 +24,17 @@ const DEFAULT_CONFIG = {
         serverSelectionTimeoutMS: 5000,
         connectTimeoutMS: 10000
       }
+    },
+    mssql: {
+      server: 'localhost',
+      database: 'logtap',
+      user: '',
+      password: '',
+      port: 1433,
+      options: {
+        encrypt: true,
+        trustServerCertificate: false
+      }
     }
   },
   auth: {
@@ -81,8 +92,8 @@ function validateConfig(config) {
     errors.push('Missing database configuration');
   } else {
     const dbType = config.database.type;
-    if (!['mongodb', 'nedb'].includes(dbType)) {
-      errors.push('Invalid database type (must be "mongodb" or "nedb")');
+    if (!['mongodb', 'nedb', 'mssql'].includes(dbType)) {
+      errors.push('Invalid database type (must be "mongodb", "nedb", or "mssql")');
     }
 
     if (dbType === 'mongodb') {
@@ -108,6 +119,26 @@ function validateConfig(config) {
         errors.push('Missing nedb configuration');
       } else if (!nedb.path || typeof nedb.path !== 'string') {
         errors.push('Invalid nedb path');
+      }
+    }
+
+    if (dbType === 'mssql') {
+      const mssql = config.database.mssql;
+      if (!mssql) {
+        errors.push('Missing mssql configuration');
+      } else {
+        if (!mssql.server || typeof mssql.server !== 'string') {
+          errors.push('Invalid mssql server');
+        }
+        if (!mssql.database || typeof mssql.database !== 'string') {
+          errors.push('Invalid mssql database name');
+        }
+        if (typeof mssql.user !== 'string') {
+          errors.push('Invalid mssql user');
+        }
+        if (typeof mssql.password !== 'string') {
+          errors.push('Invalid mssql password');
+        }
       }
     }
   }
@@ -230,6 +261,10 @@ export function maskSecrets(config) {
     if (match) {
       masked.database.mongodb.uri = `${match[1]}${match[2]}:****@${match[4]}`;
     }
+  }
+
+  if (masked.database?.mssql?.password) {
+    masked.database.mssql.password = '****';
   }
 
   return masked;

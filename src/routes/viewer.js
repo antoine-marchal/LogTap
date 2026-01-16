@@ -9,7 +9,7 @@ import {
   FRONTEND_JSX
 } from '../assets/embedded.js';
 
-const VERSION = '1.0.2';
+const VERSION = '1.0.3';
 
 export function getLogViewerHTML(token) {
   return `<!DOCTYPE html>

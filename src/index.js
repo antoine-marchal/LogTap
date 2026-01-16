@@ -30,7 +30,7 @@ const program = new Command();
 
 program
   .name('logtap')
-  .description('A lightweight, secure HTTP logging server with MongoDB/NeDB persistence')
+  .description('A lightweight, secure HTTP logging server with MongoDB/NeDB/MSSQL persistence')
   .version('1.0.0');
 
 program

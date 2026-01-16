@@ -1,7 +1,7 @@
 {
   "name": "logtap",
-  "version": "1.0.2",
-  "description": "A lightweight, secure HTTP logging server with MongoDB persistence",
+  "version": "1.0.3",
+  "description": "A lightweight, secure HTTP logging server with NeDB, MongoDB, and MSSQL persistence",
   "main": "src/index.js",
   "type": "module",
 
@@ -28,6 +28,8 @@
     "logging",
     "http",
     "mongodb",
+    "mssql",
+    "nedb",
     "cli",
     "server"
   ],
@@ -40,6 +42,7 @@
     "express-rate-limit": "^7.4.0",
     "helmet": "^7.1.0",
     "mongodb": "^6.9.0",
+    "mssql": "^11.0.1",
     "nedb-promises": "^6.2.3"
   },
   "devDependencies": {
