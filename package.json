@@ -4,22 +4,19 @@
   "description": "A lightweight, secure HTTP logging server with NeDB, MongoDB, and MSSQL persistence",
   "main": "src/index.js",
   "type": "module",
-
   "bin": {
     "logtap": "./src/index.js"
   },
   "scripts": {
     "start": "node src/index.js start",
     "dev": "node src/index.js start --verbose",
-
     "embed-assets": "node scripts/embed-assets.js",
     "prebuild": "npm run embed-assets",
-
     "build": "node scripts/build.mjs",
     "build:windows": "node scripts/build.mjs windows",
     "build:linux": "node scripts/build.mjs linux",
     "build:mac": "node scripts/build.mjs mac",
-
+    "build:esbuild": "esbuild src/index.js --bundle --platform=node --format=cjs --outfile=dist/logtap.cjs",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test:unit": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests/unit",
     "test:integration": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests/integration"
@@ -46,6 +43,7 @@
     "nedb-promises": "^6.2.3"
   },
   "devDependencies": {
+    "esbuild": "^0.27.2",
     "jest": "^29.7.0"
   },
   "engines": {

@@ -1,19 +1,20 @@
 # LogTap
 
-A lightweight, secure HTTP logging server with MongoDB or NeDB persistence.
+A lightweight, secure HTTP logging server with NeDB, MongoDB, or MSSQL persistence.
 
-LogTap provides a simple way to collect logs from any application via HTTP GET requests. All logs are stored with token-based authentication. Choose between MongoDB for production deployments or NeDB for lightweight, file-based storage.
+LogTap provides a simple way to collect logs from any application via HTTP GET requests. All logs are stored with token-based authentication. Choose between NeDB for lightweight file-based storage, MongoDB for scalable NoSQL deployments, or MSSQL for enterprise SQL Server environments.
 
 ## Features
 
 - **Simple HTTP API**: Log events via GET requests with query parameters
 - **Flexible Schema**: No predefined log structure - send any fields you need
 - **Token Authentication**: Secure access with configurable tokens
-- **Dual Database Support**: MongoDB or NeDB (file-based, no setup required)
+- **Triple Database Support**: NeDB (file-based), MongoDB, or MSSQL
 - **Web Log Viewer**: Built-in UI to view and filter logs with daisyUI
+- **Export to Excel**: Download filtered logs as XLSX files
 - **Rate Limiting**: Optional protection against abuse
 - **CLI Interface**: Full management via command line
-- **Bun Compatible**: Compile to standalone binary
+- **Multiple Build Options**: Compile with Bun or bundle with esbuild
 
 ## Quick Start
 
@@ -79,6 +80,39 @@ For production deployments, MongoDB provides better performance and scalability.
   }
 }
 ```
+
+### MSSQL
+
+For enterprise environments using Microsoft SQL Server.
+
+```json
+{
+  "database": {
+    "type": "mssql",
+    "mssql": {
+      "server": "localhost",
+      "database": "logtap",
+      "user": "sa",
+      "password": "your_password",
+      "port": 1433,
+      "options": {
+        "encrypt": true,
+        "trustServerCertificate": true
+      }
+    }
+  }
+}
+```
+
+The MSSQL adapter automatically creates the `Logs` table on first connection with the following schema:
+
+| Column | Type | Description |
+|--------|------|-------------|
+| `id` | UNIQUEIDENTIFIER | Primary key (auto-generated) |
+| `receivedAt` | DATETIME2 | Timestamp (indexed) |
+| `ip` | NVARCHAR(50) | Client IP address (indexed) |
+| `userAgent` | NVARCHAR(500) | HTTP User-Agent |
+| `log` | NVARCHAR(MAX) | JSON string containing all log fields |
 
 To switch databases, edit `config/logtap.config.json` and change `database.type`.
 
@@ -213,6 +247,17 @@ Configuration is stored in `config/logtap.config.json`:
       "uri": "mongodb://localhost:27017",
       "database": "logtap",
       "collection": "logs"
+    },
+    "mssql": {
+      "server": "localhost",
+      "database": "logtap",
+      "user": "",
+      "password": "",
+      "port": 1433,
+      "options": {
+        "encrypt": true,
+        "trustServerCertificate": false
+      }
     }
   },
   "auth": {
@@ -316,18 +361,34 @@ Get logging statistics (requires authentication).
 
 ### Compile with Bun
 
+Create standalone executables with Bun:
+
 ```bash
 # Install Bun
 curl -fsSL https://bun.sh/install | bash
 
 # Build for current platform
-bun run build
+npm run build
 
 # Build for specific platforms
-bun run build:linux
-bun run build:mac
-bun run build:windows
+npm run build:linux
+npm run build:mac
+npm run build:windows
 ```
+
+### Bundle with esbuild
+
+Create a single-file Node.js bundle:
+
+```bash
+# Build CommonJS bundle
+npm run build:esbuild
+
+# Run the bundle
+node dist/logtap.cjs start
+```
+
+This creates `dist/logtap.cjs` which can be deployed anywhere Node.js is installed.
 
 ## Use Cases
 

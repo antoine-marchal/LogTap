@@ -9,8 +9,18 @@ import { createLogRoutes } from './routes/log.js';
 import { errorHandler, notFoundHandler } from './utils/errors.js';
 import { writePidFile, removePidFile, log } from './utils/helpers.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+// Handle both ESM and CJS (esbuild bundle) environments
+const getDir = () => {
+  try {
+    if (typeof import.meta !== 'undefined' && import.meta.url) {
+      return dirname(fileURLToPath(import.meta.url));
+    }
+  } catch {
+    // Ignore - fallback below
+  }
+  return process.cwd();
+};
+const __dirname = getDir();
 
 let server = null;
 
